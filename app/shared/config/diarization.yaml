@@ -1,0 +1,41 @@
+# Realtime speaker-diarization service configuration.
+#
+# All fields map onto DiarizationSettings / ServerSettings dataclasses.
+# Override at runtime via configure(**kw) (deploy scripts) or the
+# DIARIZATION_CONFIG env var pointing at an alternative yaml file.
+#
+# Requires a HuggingFace access token with accepted terms for:
+#   pyannote/speaker-diarization-community-1  (current; auditz segmentation
+#     + wespeaker embedding + PLDA + VBx clustering)
+#   pyannote/speaker-diarization-3.1          (legacy; swap back if needed)
+# Set it via the HF_TOKEN env var (recommended) or the hf_token key below.
+# NEVER commit a real token here.
+# Create a token at: https://huggingface.co/settings/tokens
+
+server:
+  host: 0.0.0.0
+  port: 8001          # vLLM Voxtral server runs on 8000; diarization on 8001
+  log_level: info
+
+diarization:
+  device: cuda:1              # GPU 0 runs vLLM; GPU 1 runs pyannote
+  hf_token: null              # prefer HF_TOKEN env var; never commit a real token
+  pyannote_model: "pyannote/speaker-diarization-community-1"
+  sample_rate: 16000
+  pipeline_every_n: 2         # run pipeline every N segments
+  pipeline_min_audio_s: 2.0   # minimum accumulated audio before pipeline runs
+  max_speakers: null          # set to e.g. 2 if speaker count is known
+  segmentation_batch_size: 32 # windows per segmentation forward pass (GPU batching)
+  embedding_batch_size: 32    # crops per embedding forward pass (GPU batching)
+  engine_workers: 2           # parallel pipeline workers on the device
+  tf32: true                  # re-enable TF32 matmuls (throughput > accuracy; false = pyannote default)
+  session_ttl_s: 3600
+
+  # Server-wide pipeline hyperparameter defaults (applied to every worker at
+  # load; per-request `params` in /batch items override these). Selected by
+  # the VoxConverse dev sweep (benchmark_sweep.py, see
+  # benchmark_sweep_report_dev_*.json): VBx threshold 0.65 gave the best
+  # DER / JER / count±1 on full dev while matching default count accuracy.
+  pipeline_params:
+    clustering:
+      threshold: 0.65

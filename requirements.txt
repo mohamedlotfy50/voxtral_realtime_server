@@ -1,0 +1,19 @@
+# ---------------------------------------------------------------------------
+# Voxtral Realtime Server — dependencies
+# ---------------------------------------------------------------------------
+# Core API / server
+fastapi==0.135.1
+uvicorn==0.41.0
+pydantic==2.12.5
+pyyaml==6.0.3
+
+# Numerical / ML
+numpy==2.2.6
+torch==2.13.0            # install the CUDA build that matches your GPU, e.g.
+                        #   pip install torch --index-url https://download.pytorch.org/whl/cu130
+scikit-learn==1.7.2
+speechbrain==1.1.0      # kept for SpeechEmbedder.SAMPLE_RATE constant
+pyannote.audio>=4.0
+
+# vLLM (Voxtral realtime STT inference engine)
+vllm==0.27.1

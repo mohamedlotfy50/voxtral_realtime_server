@@ -1,0 +1,68 @@
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# ---------------------------------------------------------------------------
+# Caches & model artifacts (large; download separately)
+# ---------------------------------------------------------------------------
+# Hugging Face / speechbrain model cache (downloaded at runtime)
+hf_cache/
+
+# Local model weights — too large for git; download separately
+llm_model/
+
+# vLLM compilation cache
+*.pt
+*.bin
+*.safetensors
+
+# ---------------------------------------------------------------------------
+# IDE / editor
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ---------------------------------------------------------------------------
+# Config overrides / secrets
+# ---------------------------------------------------------------------------
+# Ignore the real config.yaml (contains local paths + API keys);
+# config.example.yaml is the committed template.
+config.yaml
+*.local.yaml
+*.local.yml
+.env
+.env.*
+
+# ---------------------------------------------------------------------------
+# Logs
+# ---------------------------------------------------------------------------
+*.log
+logs/
+
+# ---------------------------------------------------------------------------
+# Testing / coverage
+# ---------------------------------------------------------------------------
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
